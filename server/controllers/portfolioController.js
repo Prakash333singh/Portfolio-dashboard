@@ -1,80 +1,69 @@
-import {
-  fetchCMP,
-  fetchPERatio,
-  fetchLatestEarnings,
-} from "../services/yahooService.js"
+import { fetchStockDetails } from "../services/StockService.js"
+import stockMap from "../data/data.js"
 
-import { readPortfolioFromExcel } from "../services/excelService.js"
-
-// This function gets all stock data
+// Get all stock data from stockMap
 export const getAllStockData = async (req, res) => {
+  try {
+    // For each stock in stockMap, fetch details
+    const stockDataPromises = Object.entries(stockMap).map(
+      async ([symbol, stock]) => {
+        try {
+          
+          const { cmp, peRatio, latestEarnings } = await fetchStockDetails(
+            symbol    
+          )
 
-  // Load portfolio from Excel file (adjust path if needed)
-  const portfolio = readPortfolioFromExcel("./data/portfolio.xlsx")
-//   console.log(portfolio)
+          const investment = stock.purchasePrice * stock.quantity
+          const presentValue = cmp !== "N/A" ? cmp * stock.quantity : 0
+          const gainLoss = presentValue - investment
 
-  const stockDataPromises = portfolio.map(
-    async (stock) => {
-      try {
-        // Fetch CMP, P/E ratio, and Earnings from yahooService
-        const cmp = await fetchCMP(stock.symbol)
-        const peRatio = await fetchPERatio(stock.symbol)
-        const latestEarnings = await fetchLatestEarnings(stock.symbol)
-
-        const investment = stock.purchasePrice * stock.quantity
-        const presentValue = cmp * stock.quantity
-        const gainLoss = presentValue - investment
-
-        const result = {
-          name: stock.name,
-          symbol,
-          purchasePrice: stock.purchasePrice,
-          quantity: stock.quantity,
-          investment,
-          cmp,
-          presentValue,
-          gainLoss,
-          peRatio,
-          latestEarnings,
-          sector: stock.sector,
-          portfolioPercentage: 0,
-        }
-
-        console.log(result," RESULT");
-        return result;
-      } catch (error) {
-        return {
-          name: stock.name,
-          symbol,
-          error: error.message || "Failed to fetch stock data",
+          return {
+            name: stock.name,
+            symbol,
+            purchasePrice: stock.purchasePrice,
+            quantity: stock.quantity,
+            investment,
+            cmp,
+            presentValue,
+            gainLoss,
+            peRatio,
+            latestEarnings,
+            sector: stock.sector,
+            portfolioPercentage: 0, // will update later
+          }
+        } catch (error) {
+          return {
+            name: stock.name,
+            symbol,
+            error: error.message || "Failed to fetch stock data",
+          }
         }
       }
-    }
-  )
+    )
 
-  try {
+    // Wait for all stocks to resolve
     const allStockData = await Promise.all(stockDataPromises)
 
-    // Calculate total investment for portfolio percentage
-    const totalInvestment = allStockData.reduce((total, stock) => {
-      return total + (stock.investment || 0)
-    }, 0)
+    // Calculate total investment for portfolio % calculation
+    const totalInvestment = allStockData.reduce(
+      (total, stock) => total + (stock.investment || 0),
+      0
+    )
 
-    // Update portfolio percentage for each stock
-    allStockData.forEach((stock) => {
-      if (totalInvestment > 0) {
+    // Add portfolio percentage
+    const finalPortfolio = allStockData.map((stock) => {
+      if (totalInvestment > 0 && stock.investment) {
         stock.portfolioPercentage =
           (((stock.investment || 0) / totalInvestment) * 100).toFixed(2) + "%"
       } else {
         stock.portfolioPercentage = "0%"
       }
+      return stock
     })
 
-    res.json(allStockData)
+    res.json(finalPortfolio)
   } catch (error) {
-    console.error(error)
-    res.status(500).json({ error: "Failed to fetch stocks data" })
+    console.error("Error in getAllStockData:", error.message)
+    res.status(500).json({ error: "Failed to fetch portfolio data" })
   }
 }
-
-
