@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Dashboard = () => {
     const [stocks, setStocks] = useState([]);
@@ -8,7 +8,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchStockData = async () => {
             try {
-                const response = await fetch('https://finance-portfolio-dashboard-backend.onrender.com/api/stocks');
+                const response = await fetch(`backendUrl`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch stock data');
                 }
@@ -45,6 +45,8 @@ const Dashboard = () => {
         acc[sector].push(stock);
         return acc;
     }, {});
+
+    console.log(stocksBySector)
 
     return (
         <div className="p-4 min-h-screen bg-gradient-to-br from-slate-100 to-blue-50">
