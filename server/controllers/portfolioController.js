@@ -13,7 +13,7 @@ export const getAllStockData = async (req, res) => {
 
           const investment = stock.purchasePrice * stock.quantity
           const presentValue = cmp !== "N/A" ? cmp * stock.quantity : 0
-          const gainLoss = presentValue - investment
+          const gainLoss = presentValue - investment 
 
           return {
             name: stock.name,
@@ -22,8 +22,8 @@ export const getAllStockData = async (req, res) => {
             quantity: stock.quantity,
             investment,
             cmp,
-            presentValue,
-            gainLoss,
+            presentValue: presentValue.toFixed(3),
+            gainLoss: gainLoss.toFixed(3),
             peRatio,
             eps,
             sector: stock.sector,

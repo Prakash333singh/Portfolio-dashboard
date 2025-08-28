@@ -10,10 +10,10 @@ export const fetchStockDetails = async (symbol) => {
     // Current Market Price
     const cmp = data.price?.regularMarketPrice ?? "N/A"
 
-    // Trailing P/E Ratio (only factual, not estimates)
+    // Trailing P/E Ratio
     const peRatio = data.defaultKeyStatistics?.forwardEps || data.defaultKeyStatistics?.trailingPE || "N/A";
 
-    //Earnings Per Share (EPS - actual)
+    //Earnings Per Share 
      const eps1 = data?.financialData?.epsTrailingTwelveMonths
      const eps2 = data?.defaultKeyStatistics?.trailingEps
 
