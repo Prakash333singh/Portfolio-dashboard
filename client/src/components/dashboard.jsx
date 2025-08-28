@@ -60,13 +60,13 @@ const Dashboard = () => {
                 {Object.entries(stocksBySector).map(([sector, sectorStocks]) => (
                     <div
                         key={sector}
-                        className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition duration-300"
+                        className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition duration-300 overflow-x-auto"
                     >
                         <h2 className="text-2xl font-semibold mb-6 text-blue-600 border-b-2 border-blue-300 pb-2 flex items-center gap-2">
                             <span>🏷️</span> {sector}
                         </h2>
 
-                        <div className="overflow-x-auto">
+                        <div className=" ">
                             <table className="min-w-full text-sm text-left text-gray-700">
                                 <thead className="bg-gradient-to-r from-blue-500 to-blue-700 text-white text-xs uppercase tracking-wider">
                                     <tr>
