@@ -8,9 +8,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchStockData = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/v1/stock`);
-
-                console.log("Fetch response:", response);
+                const response = await fetch(`https://portfolio-dashboard-7cmc.vercel.app/api/v1/stock`);
                 if (!response.ok) throw new Error("Failed to fetch stock data");
                 const data = await response.json();
                 setStocks(data);
