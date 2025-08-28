@@ -132,8 +132,4 @@ Frontend runs at **[http://localhost:5173](http://localhost:5173)** (Vite defaul
 
 ## 📜 License
 
-MIT License © 2025 \[Your Name]
-
-```
-
-```
+MIT License © 2025 \[Prakash]
