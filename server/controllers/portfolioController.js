@@ -9,9 +9,7 @@ export const getAllStockData = async (req, res) => {
       async ([symbol, stock]) => {
         try {
           
-          const { cmp, peRatio, latestEarnings } = await fetchStockDetails(
-            symbol    
-          )
+          const { cmp, peRatio, eps } = await fetchStockDetails(symbol)
 
           const investment = stock.purchasePrice * stock.quantity
           const presentValue = cmp !== "N/A" ? cmp * stock.quantity : 0
@@ -27,7 +25,7 @@ export const getAllStockData = async (req, res) => {
             presentValue,
             gainLoss,
             peRatio,
-            latestEarnings,
+            eps,
             sector: stock.sector,
             portfolioPercentage: 0, // will update later
           }

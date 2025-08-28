@@ -8,7 +8,9 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchStockData = async () => {
             try {
-                const response = await fetch(`https://portfolio-dashboard-7cmc.vercel.app/api/v1/stock`);
+                const response = await fetch(`http://localhost:5000/api/v1/stock`);
+
+                console.log("Fetch response:", response);
                 if (!response.ok) throw new Error("Failed to fetch stock data");
                 const data = await response.json();
                 setStocks(data);
@@ -112,7 +114,7 @@ const Dashboard = () => {
                                             </td>
                                             <td className="py-3 px-4">{stock.peRatio || "N/A"}</td>
                                             <td className="py-3 px-4">
-                                                {stock.latestEarnings || "N/A"}
+                                                {stock.eps || "N/A"}
                                             </td>
                                             <td className="py-3 px-4 w-40">
                                                 <div className="w-full bg-gray-200 rounded-full h-3">

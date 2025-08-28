@@ -12,12 +12,6 @@ const stockMap = {
     quantity: 15,
     sector: "Financials",
   },
-  "SAVFI.NS": {
-    name: "Savani Financials",
-    purchasePrice: 24,
-    quantity: 1080,
-    sector: "Financials",
-  },
   "BAJAJHFL.NS": {
     name: "Bajaj Housing Finance",
     purchasePrice: 130,

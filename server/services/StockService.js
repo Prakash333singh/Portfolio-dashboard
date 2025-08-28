@@ -14,13 +14,12 @@ export const fetchStockDetails = async (symbol) => {
     const peRatio = data.defaultKeyStatistics?.forwardEps || data.defaultKeyStatistics?.trailingPE || "N/A";
 
     //Earnings Per Share (EPS - actual)
-    const epsValue =
-      data.financialData?.epsTrailingTwelveMonths ??
-      data.defaultKeyStatistics?.trailingEps ??
-      null
+     const eps1 = data?.financialData?.epsTrailingTwelveMonths
+     const eps2 = data?.defaultKeyStatistics?.trailingEps
 
-      // Format EPS to 2 decimal places if it's a number
-    const eps = epsValue ? `₹${epsValue.toFixed(2)}` : "N/A"
+    const result = eps1 || eps2
+
+     const eps =  result ? `₹${result.toFixed(2)}` : "N/A"
 
     // Return all fetched details
     return { cmp, peRatio, eps }
