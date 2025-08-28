@@ -22,3 +22,6 @@ app.use("/api/v1/stock",stockRoutes)
 app.listen(PORT,()=>{
     console.log(`Server is running on port ${PORT}`);
 })
+
+
+export default app
